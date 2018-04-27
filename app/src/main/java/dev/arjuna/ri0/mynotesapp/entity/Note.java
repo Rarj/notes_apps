@@ -73,7 +73,7 @@ public class Note implements Parcelable {
         this.date = getColumnString(cursor, DatabaseContract.NoteColumns.DATE);
     }
 
-    protected Note(Parcel in) {
+    private Note(Parcel in) {
         this.id = in.readInt();
         this.title = in.readString();
         this.description = in.readString();

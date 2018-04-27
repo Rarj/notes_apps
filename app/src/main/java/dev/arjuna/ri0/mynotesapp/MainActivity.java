@@ -1,23 +1,23 @@
 package dev.arjuna.ri0.mynotesapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Objects;
 
 import dev.arjuna.ri0.mynotesapp.adapter.NoteAdapter;
-import dev.arjuna.ri0.mynotesapp.db.NoteHelper;
-import dev.arjuna.ri0.mynotesapp.entity.Note;
 
 import static dev.arjuna.ri0.mynotesapp.FormAddUpdateActivity.REQUEST_UPDATE;
 import static dev.arjuna.ri0.mynotesapp.db.DatabaseContract.CONTENT_URI;
@@ -35,17 +35,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setTitle("Notes");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setTitle("Notes");
+        }
 
-        rvNotes = (RecyclerView)findViewById(R.id.rv_notes);
+        rvNotes = findViewById(R.id.rv_notes);
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
         rvNotes.setHasFixedSize(true);
 
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
-        fabAdd = (FloatingActionButton)findViewById(R.id.fab_add);
+        progressBar = findViewById(R.id.progressbar);
+        fabAdd = findViewById(R.id.fab_add);
         fabAdd.setOnClickListener(this);
 
         adapter = new NoteAdapter(this);
+
         adapter.setListNotes(list);
         rvNotes.setAdapter(adapter);
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class LoadNoteAsync extends AsyncTask<Void, Void, Cursor>{
         @Override
         protected void onPreExecute() {
@@ -83,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(Cursor notes) {
             super.onPostExecute(notes);
             progressBar.setVisibility(View.GONE);
+
+
 
             list = notes;
             adapter.setListNotes(list);

@@ -21,7 +21,7 @@ public class DatabaseContract {
     }
 
     // Authority yang digunakan
-    public static final String AUTHORITY = "com.arjuna.ri0.mynotesapp";
+    public static final String AUTHORITY = "dev.arjuna.ri0.mynotesapp";
 
     // Base content yang digunakan untuk akses content provider
     public static final Uri CONTENT_URI = new Uri.Builder().scheme("content")
