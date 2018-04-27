@@ -21,7 +21,7 @@ import dev.arjuna.ri0.mynotesapp.entity.Note;
 import static dev.arjuna.ri0.mynotesapp.FormAddUpdateActivity.REQUEST_UPDATE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-
+//test master commit
     RecyclerView rvNotes;
     ProgressBar progressBar;
     FloatingActionButton fabAdd;
