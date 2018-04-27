@@ -37,6 +37,10 @@ public class NoteHelper {
         dataBaseHelper.close();
     }
 
+    /*
+    METHOD DIBAWAH INI UNTUK QUERY YANG LAMA ATAU UNTUK PROJECT SQLITE
+     */
+
     /**
      * Gunakan method ini untuk ambil semua note yang ada
      * Otomatis di parsing ke dalam model Note
@@ -44,7 +48,13 @@ public class NoteHelper {
      */
     public ArrayList<Note> query(){
         ArrayList<Note> arrayList = new ArrayList<Note>();
-        Cursor cursor = database.query(DATABASE_TABLE,null,null,null,null,null,_ID +" DESC",null);
+        Cursor cursor = database.query(DATABASE_TABLE
+                ,null
+                ,null
+                ,null
+                ,null
+                ,null,_ID +" DESC"
+                ,null);
         cursor.moveToFirst();
         Note note;
         if (cursor.getCount()>0) {
@@ -98,5 +108,72 @@ public class NoteHelper {
      */
     public int delete(int id){
         return database.delete(TABLE_NOTE, _ID + " = '"+id+"'", null);
+    }
+
+
+
+    /*
+    METHOD DI BAWAH INI ADALAH QUERY UNTUK CONTENT PROVIDER
+    NILAI BALIK CURSOR
+    */
+
+    /**
+     * Ambil data dari note berdasarakan parameter id
+     * Gunakan method ini untuk ambil data di dalam provider
+     * @param id id note yang dicari
+     * @return cursor hasil query
+     */
+    public Cursor queryByIdProvider(String id){
+        return database.query(DATABASE_TABLE,null
+                ,_ID + " = ?"
+                ,new String[]{id}
+                ,null
+                ,null
+                ,null
+                ,null);
+    }
+
+    /**
+     * Ambil data dari semua note yang ada di dalam database
+     * Gunakan method ini untuk ambil data di dalam provider
+     * @return cursor hasil query
+     */
+    public Cursor queryProvider(){
+        return database.query(DATABASE_TABLE
+                ,null
+                ,null
+                ,null
+                ,null
+                ,null
+                ,_ID + " DESC");
+    }
+
+    /**
+     * Simpan data ke dalam database
+     * Gunakan method ini untuk query insert di dalam provider
+     * @param values nilai data yang akan di simpan
+     * @return long id dari data yang baru saja di masukkan
+     */
+    public long insertProvider(ContentValues values){
+        return database.insert(DATABASE_TABLE,null,values);
+    }
+
+    /**
+     * Update data dalam database
+     * @param id data dengan id berapa yang akan di update
+     * @param values nilai data baru
+     * @return int jumlah data yang ter-update
+     */
+    public int updateProvider(String id,ContentValues values){
+        return database.update(DATABASE_TABLE,values,_ID +" = ?",new String[]{id} );
+    }
+
+    /**
+     * Delete data dalam database
+     * @param id data dengan id berapa yang akan di delete
+     * @return int jumlah data yang ter-delete
+     */
+    public int deleteProvider(String id){
+        return database.delete(DATABASE_TABLE,_ID + " = ?", new String[]{id});
     }
 }
